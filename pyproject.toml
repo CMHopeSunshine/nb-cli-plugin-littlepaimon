@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "nb-cli-plugin-littlepaimon"
+version = "1.0.0beta1"
+description = "Nonebot Cli plugin for LittlePaimon"
+authors = ["CMHopeSunshine <277073121@qq.com>"]
+keywords = ["nonebot2", "nb-cli"]
+homepage = "https://github.com/CMHopeSunshine/nb-cli-plugin-littlepaimon"
+readme = "README.md"
+license = "AGPL"
+
+[[tool.poetry.source]]
+name = "aliyun"
+default = true
+url = "https://mirrors.aliyun.com/pypi/simple/"
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+nb-cli = "^1.0.2"
+py-cpuinfo = "^9.0.0"
+tqdm = "^4.64.1"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.plugins.nb]
+paimon = "nb_cli_plugin_littlepaimon.plugin:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
