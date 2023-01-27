@@ -7,6 +7,8 @@ import httpx
 from cpuinfo import get_cpu_info
 from nb_cli.consts import WINDOWS
 
+from .download import download_with_bar
+
 _SYSTEM_MAP = {
     "Windows": "windows",
     "Linux":   "linux",
@@ -38,7 +40,7 @@ EXECUTABLE_EXT = ".exe" if WINDOWS else ""
 GOCQ_DIR = Path() / "go-cqhttp"
 
 
-async def download_gocq(download_domain: str = 'github.com'):
+def download_gocq(download_domain: str = 'github.com'):
     """
     下载gocq
 
@@ -47,16 +49,8 @@ async def download_gocq(download_domain: str = 'github.com'):
     GOCQ_DIR.mkdir(parents=True, exist_ok=True)
     download_path = Path() / f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
     url = f'https://{download_domain}/Mrs4s/go-cqhttp/releases/latest/download/go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
-    async with httpx.AsyncClient(follow_redirects=True) as client:
-        resp = await client.get(url)
-        resp.raise_for_status()
-
-        with open(download_path, 'wb') as f:
-            f.write(resp.content)
-
-        zipf = zipfile.ZipFile(download_path)
-        zipf.extractall(GOCQ_DIR)
-        zipf.close()
-        await asyncio.sleep(1)
-        download_path.unlink()
-        return GOCQ_DIR / f'go-cqhttp{EXECUTABLE_EXT}'
+    download_with_bar(url=url, save_path=download_path, show_name=f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}')
+    with zipfile.ZipFile(download_path, 'r') as z:
+        z.extractall(GOCQ_DIR)
+    download_path.unlink()
+    return GOCQ_DIR / f'go-cqhttp{EXECUTABLE_EXT}'

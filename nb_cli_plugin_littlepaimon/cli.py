@@ -6,22 +6,23 @@ from nb_cli.cli import CLI_DEFAULT_STYLE, ClickAliasedGroup, run_sync, run_async
 from noneprompt import Choice, ListPrompt, CancelledError
 
 from .meta import LOGO
-from .create import create
 from . import __version__
 
 
-@click.group(cls=ClickAliasedGroup, invoke_without_command=True, help=_('管理 LittlePaimon.'))
+@click.group(cls=ClickAliasedGroup,
+             invoke_without_command=True,
+             help='管理 LittlePaimon.')
 @click.version_option(
     __version__,
     "-V",
     "--version",
-    prog_name="nb paimon",
-    message="%(prog)s: Nonebot CLI plugin for LittlePaimon  version %(version)s",
+    prog_name="paimon",
+    message="%(prog)s: NB CLI plugin version %(version)s for LittlePaimon",
 )
 @click.pass_context
 @run_async
 async def paimon(ctx: click.Context):
-    """Command help."""
+    """为 LittlePaimon 定制的Nonebot CLI 插件."""
     if ctx.invoked_subcommand is not None:
         return
 
@@ -38,12 +39,12 @@ async def paimon(ctx: click.Context):
                     sub_cmd,
                 )
             )
-    click.secho(LOGO, fg="green", bold=True)
-    click.secho(_("Welcome to Nonebot CLI plugin for LittlePaimon!"), fg="green", bold=True)
+    click.secho(LOGO, fg='green', bold=True)
+    click.secho('欢迎来到小派蒙的Nonebot CLI 插件!', fg='green', bold=True)
 
     try:
         result = await ListPrompt(
-            _("What do you want to do?"), choices=choices
+            '你想要进行什么操作?', choices=choices
         ).prompt_async(style=CLI_DEFAULT_STYLE)
     except CancelledError:
         ctx.exit()
@@ -52,17 +53,17 @@ async def paimon(ctx: click.Context):
     await run_sync(ctx.invoke)(sub_cmd)
 
 
+from .commands import create, install, resources
+
 paimon.add_command(create)
+paimon.add_command(install)
+paimon.add_command(resources)
 
 
-@paimon.command()
+@paimon.command(
+    aliases=['show'],
+    help='展示小派蒙的LOGO.'
+)
 def logo():
-    """展示LOGO"""
-    click.secho(LOGO, fg="green", bold=True)
-    click.secho(_("Welcome to LittlePaimon CLI!"), fg="green", bold=True)
-
-
-@paimon.command()
-def more():
-    """开发中"""
-    click.secho('更多功能正在开发中...', fg='green')
+    click.secho(LOGO, fg='green', bold=True)
+    click.secho('欢迎来到小派蒙的Nonebot CLI插件!', fg='green', bold=True)

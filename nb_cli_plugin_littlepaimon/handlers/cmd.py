@@ -1,6 +1,8 @@
 import asyncio
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
+
+from nb_cli.handlers import get_default_python
 
 
 async def clone_paimon(git_url: str, dir_name: Optional[str] = 'LittlePaimon'):
@@ -20,21 +22,28 @@ async def clone_paimon(git_url: str, dir_name: Optional[str] = 'LittlePaimon'):
     return process
 
 
-async def install_dependencies(python_path: Optional[str] = None,
-                               dir_name: Optional[str] = 'LittlePaimon'):
+async def install_dependencies(file_path: Path,
+                               python_path: Optional[str] = None,
+                               pip_args: Optional[List[str]] = None):
     """
     安装requirements.txt中的依赖
 
+    :param file_path: 依赖库文件路径
     :param python_path: python解释器路径
-    :param dir_name: 项目路径
+    :param pip_args: pip参数
     """
+    if pip_args is None:
+        pip_args = []
+    if python_path is None:
+        python_path = await get_default_python()
     proc = await asyncio.create_subprocess_exec(python_path,
                                                 '-m',
                                                 'pip',
                                                 'install',
                                                 '-r',
-                                                'requirements.txt',
-                                                cwd=Path() / dir_name)
+                                                file_path.name,
+                                                *pip_args,
+                                                cwd=file_path.parent.absolute())
     stdout, _ = await proc.communicate()
     return proc
 
