@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Optional
 
 import click
-from nb_cli import _
 from nb_cli.cli import ClickAliasedCommand, run_async, CLI_DEFAULT_STYLE
 from nb_cli.cli.commands.project import project_name_validator
 from nb_cli.consts import WINDOWS
@@ -28,7 +27,7 @@ from ..meta import LOGO
     '-p',
     '--python-interpreter',
     default=None,
-    help=_('The python interpreter virtualenv is installed into.'),
+    help='指定Python解释器的路径',
 )
 @click.option('-i',
               '--index-url',
@@ -55,7 +54,7 @@ async def create(ctx: click.Context,
         while True:
             # 项目名称
             project_name = await InputPrompt(
-                _("Project Name:"),
+                '项目名称:',
                 default_text='LittlePaimon',
                 validator=project_name_validator
             ).prompt_async(style=CLI_DEFAULT_STYLE)
@@ -109,7 +108,7 @@ async def create(ctx: click.Context,
 
             env_file = (Path('.') / project_name / '.env.prod').read_text(encoding='utf-8')
             superusers = await InputPrompt(
-                '填写超级用户(即你自己的QQ号，多个用空格隔开):',
+                '超级用户QQ(即你自己的QQ号，多个用空格隔开):',
                 validator=lambda x: x.replace(' ', '').isdigit(),
             ).prompt_async(style=CLI_DEFAULT_STYLE)
             if superusers := superusers.replace(' ', '", "'):
@@ -117,22 +116,20 @@ async def create(ctx: click.Context,
             (Path('.') / project_name / '.env.prod').write_text(env_file, encoding='utf-8')
 
         is_install_dependencies = await ConfirmPrompt(
-            _('Install dependencies now?'), default_choice=True
+            '立刻安装依赖?', default_choice=True
         ).prompt_async(style=CLI_DEFAULT_STYLE)
         venv_dir = Path('.') / project_name / '.venv'
 
         python_path = None
         if is_install_dependencies:
             is_use_venv = await ConfirmPrompt(
-                _('Create virtual environment?'), default_choice=True
+                '创建虚拟环境?', default_choice=True
             ).prompt_async(style=CLI_DEFAULT_STYLE)
 
             python_path = None
             if is_use_venv:
                 click.secho(
-                    _('Creating virtual environment in {venv_dir} ...').format(
-                        venv_dir=venv_dir
-                    ),
+                    f'在 {venv_dir} 中创建虚拟环境...',
                     fg='yellow',
                 )
                 await create_virtualenv(
@@ -184,11 +181,11 @@ async def create(ctx: click.Context,
                 if gocq_path and gocq_path.exists():
                     gocq_type = 2
                     bot_qq = await InputPrompt(
-                        _("填写机器人的QQ号:"),
+                        '机器人的QQ号:',
                         validator=lambda x: x.isdigit(),
                     ).prompt_async(style=CLI_DEFAULT_STYLE)
                     password = await InputPrompt(
-                        _("填写机器人的密码(留空则为扫码登录):"),
+                        '机器人的密码(留空则为扫码登录):',
                         is_password=True
                     ).prompt_async(style=CLI_DEFAULT_STYLE)
                     config_data = (

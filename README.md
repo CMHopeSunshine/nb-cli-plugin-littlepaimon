@@ -7,7 +7,7 @@
 
 # NB CLI Plugin For LittlePaimon
 
-_✨ 为小派蒙Bot定制的 NoneBot2 CLI 插件 ✨_
+_✨ 为[小派蒙Bot](https://github.com/CMHopeSunshine/LittlePaimon)定制的 NoneBot2 CLI 插件 ✨_
 
 <a href="./LICENSE">
     <img src="https://img.shields.io/github/license/CMHopeSunshine/nb-cli-plugin-littlepaimon.svg" alt="license">
@@ -88,7 +88,7 @@ pip install nb-cli-plugin-littlepaimon
 
 - `nb paimon` 交互式使用
   - `nb paimon create` 
-    - 交互式指引安装[小派蒙Bot](https://github.com/CMHopeSunshine/LittlePaimon)
+    - 交互式指引安装[LittlePaimon](https://github.com/CMHopeSunshine/LittlePaimon)
     - 自动克隆源码、创建虚拟环境、安装依赖，下载并配置go-cqhttp
   - `nb paimon install` 安装依赖库到小派蒙环境中
   - `nb paimon res` 下载或更新小派蒙的资源
@@ -101,3 +101,7 @@ pip install nb-cli-plugin-littlepaimon
 - [ ] 修改配置
 - [ ] 安装小派蒙插件
 - [ ] more
+
+## 相关项目
+- [nb-cli](https://github.com/nonebot/nb-cli)
+- [LittlePaimon](https://github.com/CMHopeSunshine/LittlePaimon)

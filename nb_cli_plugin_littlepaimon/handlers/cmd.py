@@ -5,7 +5,8 @@ from typing import Optional, List
 from nb_cli.handlers import get_default_python
 
 
-async def clone_paimon(git_url: str, dir_name: Optional[str] = 'LittlePaimon'):
+async def clone_paimon(git_url: str,
+                       dir_name: Optional[str] = 'LittlePaimon'):
     """
     克隆派蒙项目
 
@@ -36,6 +37,8 @@ async def install_dependencies(file_path: Path,
         pip_args = []
     if python_path is None:
         python_path = await get_default_python()
+    if isinstance(python_path, Path):
+        python_path = python_path.absolute()
     proc = await asyncio.create_subprocess_exec(python_path,
                                                 '-m',
                                                 'pip',
