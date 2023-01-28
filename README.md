@@ -20,6 +20,10 @@ _✨ 为[小派蒙Bot](https://github.com/CMHopeSunshine/LittlePaimon)定制的 
 
 </div>
 
+## 演示
+
+[![asciicast](https://asciinema.org/a/qGZ6deVHcdw4wBDJH6TQeHZYV.svg)](https://asciinema.org/a/qGZ6deVHcdw4wBDJH6TQeHZYV)
+
 ## 安装
 
 <details>
