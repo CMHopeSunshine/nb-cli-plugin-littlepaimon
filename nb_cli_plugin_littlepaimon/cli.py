@@ -5,8 +5,8 @@ from nb_cli import _
 from nb_cli.cli import CLI_DEFAULT_STYLE, ClickAliasedGroup, run_sync, run_async
 from noneprompt import Choice, ListPrompt, CancelledError
 
-from .meta import LOGO
 from . import __version__
+from .meta import LOGO
 
 
 @click.group(cls=ClickAliasedGroup,

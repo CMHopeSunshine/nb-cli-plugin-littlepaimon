@@ -4,6 +4,7 @@ from typing import Optional, List
 import click
 from nb_cli.cli import run_async, ClickAliasedCommand
 from nb_cli.handlers import detect_virtualenv, call_pip_install
+
 from ..handlers.cmd import install_dependencies
 
 

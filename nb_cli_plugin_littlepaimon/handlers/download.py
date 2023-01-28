@@ -1,9 +1,8 @@
+import math
 from pathlib import Path
 from typing import Optional
 
 import httpx
-import math
-
 from tqdm import tqdm
 
 

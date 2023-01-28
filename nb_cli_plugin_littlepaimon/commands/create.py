@@ -8,14 +8,14 @@ from typing import Optional
 import click
 from nb_cli import _
 from nb_cli.cli import ClickAliasedCommand, run_async, CLI_DEFAULT_STYLE
+from nb_cli.cli.commands.project import project_name_validator
 from nb_cli.consts import WINDOWS
 from nb_cli.handlers import create_virtualenv, call_pip_install
-from nb_cli.cli.commands.project import project_name_validator
 from noneprompt import Choice, ListPrompt, CancelledError, ConfirmPrompt, InputPrompt
 
 from ..handlers.cmd import check_git, clone_paimon, install_dependencies
-from ..meta import LOGO
 from ..handlers.gocq import download_gocq, EXECUTABLE_EXT
+from ..meta import LOGO
 
 
 @click.command(

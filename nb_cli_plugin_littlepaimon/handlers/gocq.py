@@ -3,7 +3,6 @@ import platform
 import zipfile
 from pathlib import Path
 
-import httpx
 from cpuinfo import get_cpu_info
 from nb_cli.consts import WINDOWS
 
@@ -24,6 +23,11 @@ _ARCHITECTURE_MAP = {
 
 
 def _get_platform():
+    """
+    获取系统和架构
+
+    :return: 系统和架构的元组。
+    """
     try:
         system = _SYSTEM_MAP[platform.system()]
         architecture = _ARCHITECTURE_MAP[get_cpu_info()["arch"]]
