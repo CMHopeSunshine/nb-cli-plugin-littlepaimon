@@ -63,3 +63,13 @@ async def check_git() -> bool:
     stdout, _ = await process.communicate()
     return bool(stdout)
 
+
+async def git_pull(cwd: Optional[Path] = None):
+    """
+    通过git更新派蒙项目
+
+    """
+    process = await asyncio.create_subprocess_shell('git pull',
+                                                    cwd=cwd)
+    stdout, _ = await process.communicate()
+    return process

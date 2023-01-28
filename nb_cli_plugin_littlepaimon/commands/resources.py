@@ -90,7 +90,13 @@ async def resources(ctx: click.Context,
             resources_path = cwd_path / 'resources'
             resources_path.mkdir(exist_ok=True, parents=True)
             base_zip_path = cwd_path / 'base.zip'
-            if not force and (resources_path / 'fonts').is_dir() and (resources_path / 'LittlePaimon').is_dir():
+            if (
+                    not force and
+                    ((resources_path / 'fonts').is_dir() and
+                     (resources_path / 'LittlePaimon').is_dir()
+                     and len(list((resources_path / 'LittlePaimon').rglob('*'))) >= 50)
+            ):
+                click.secho('检测到已有部分基础资源，进行增量更新...', fg='yellow')
                 base_resources_list = download_json(
                     f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/LittlePaimonRes/main/resources_list.json')
                 for resource in base_resources_list:

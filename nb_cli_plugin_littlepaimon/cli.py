@@ -53,10 +53,12 @@ async def paimon(ctx: click.Context):
     await run_sync(ctx.invoke)(sub_cmd)
 
 
-from .commands import create, install, resources
+from .commands import create, install, resources, run, update
 
 paimon.add_command(create)
+paimon.add_command(run)
 paimon.add_command(install)
+paimon.add_command(update)
 paimon.add_command(resources)
 
 
