@@ -51,6 +51,8 @@ pip install nb-cli
 
 </details>
 
+---
+
 <details>
 <summary>安装本插件</summary>
 
@@ -80,6 +82,8 @@ pip install nb-cli-plugin-littlepaimon
 </details>
 
 </details>
+
+---
 
 <details>
 <summary>安装Git</summary>
