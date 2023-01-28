@@ -201,7 +201,7 @@ async def create(ctx: click.Context,
         if gocq_type == 2:
             if WINDOWS:
                 click.secho(f'  cd {project_name}', fg='green')
-                click.secho('  nb run', fg='green')
+                click.secho('  nb paimon run', fg='green')
                 click.secho('  双击运行go-cqhttp文件夹下的go-cqhttp.exe', fg='green')
                 click.secho('  两个窗口都不能关闭!!!', fg='green')
             else:
@@ -209,12 +209,12 @@ async def create(ctx: click.Context,
                 click.secho('  chmod 755 go-cqhttp (仅首次需要)', fg='green')
                 click.secho('  nohup ./go-cqhttp &', fg='green')
                 click.secho(f'  cd ../{project_name}', fg='green')
-                click.secho('  nb run', fg='green')
+                click.secho('  nb paimon run', fg='green')
         else:
             click.secho(f'  cd {project_name}', fg='green')
             if not is_install_dependencies:
                 click.secho('  使用你自己的依赖管理器来安装依赖', fg='green')
-            click.secho('  nb run', fg='green')
+            click.secho('  nb paimon run', fg='green')
             if gocq_type == 1:
                 click.secho('  访问http://127.0.0.1:13579/go-cqhttp登录账号')
         click.secho('开始享用小派蒙吧!', fg='green')

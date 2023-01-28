@@ -22,7 +22,7 @@ _✨ 为[小派蒙Bot](https://github.com/CMHopeSunshine/LittlePaimon)定制的 
 
 ## 演示
 
-[![asciicast](https://asciinema.org/a/qGZ6deVHcdw4wBDJH6TQeHZYV.svg)](https://asciinema.org/a/qGZ6deVHcdw4wBDJH6TQeHZYV)
+[![asciicast](https://asciinema.org/a/kMBRbuX5lCEnk5lmXcU53ys5b.svg)](https://asciinema.org/a/kMBRbuX5lCEnk5lmXcU53ys5b)
 
 ## 安装
 
