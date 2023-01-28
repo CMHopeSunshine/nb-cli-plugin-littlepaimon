@@ -94,9 +94,13 @@ pip install nb-cli-plugin-littlepaimon
   - `nb paimon create` 
     - 交互式指引安装[LittlePaimon](https://github.com/CMHopeSunshine/LittlePaimon)
     - 自动克隆源码、创建虚拟环境、安装依赖，下载并配置go-cqhttp
+  - `nb paimon run` 启动小派蒙
+    - 实际上和`nb run`一样，不过去掉了不常用的参数 
   - `nb paimon install` 安装依赖库到小派蒙环境中
   - `nb paimon res` 下载或更新小派蒙的资源
+  - `nb paimon update` 更新小派蒙，和`git pull`一样
   - `nb paimon logo` 展示小派蒙的logo
+- `nb paimon (xxx) --help` 查看帮助
 
 ## TODO
 
