@@ -1,6 +1,5 @@
-import asyncio
 import platform
-import zipfile
+import shutil
 from pathlib import Path
 
 from cpuinfo import get_cpu_info
@@ -54,7 +53,6 @@ def download_gocq(download_domain: str = 'github.com'):
     download_path = Path() / f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
     url = f'https://{download_domain}/Mrs4s/go-cqhttp/releases/latest/download/go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
     download_with_bar(url=url, save_path=download_path, show_name=f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}')
-    with zipfile.ZipFile(download_path, 'r') as z:
-        z.extractall(GOCQ_DIR)
+    shutil.unpack_archive(download_path, extract_dir=GOCQ_DIR)
     download_path.unlink()
     return GOCQ_DIR / f'go-cqhttp{EXECUTABLE_EXT}'
