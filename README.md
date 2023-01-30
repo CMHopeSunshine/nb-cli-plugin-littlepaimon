@@ -104,12 +104,12 @@ pip install nb-cli-plugin-littlepaimon
   - `nb paimon res` 下载或更新小派蒙的资源
   - `nb paimon update` 更新小派蒙，和`git pull`一样
   - `nb paimon logo` 展示小派蒙的logo
-- `nb paimon (xxx) --help` 查看帮助
+- `nb paimon (指令) --help` 查看帮助
 
 ## TODO
 
 - [x] 更新资源
-- [ ] 自动安装git
+- [ ] 不依赖git
 - [ ] 修改配置
 - [ ] 安装小派蒙插件
 - [ ] more

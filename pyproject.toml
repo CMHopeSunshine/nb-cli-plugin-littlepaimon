@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nb-cli-plugin-littlepaimon"
-version = "1.0.0rc2"
+version = "1.0.0rc3"
 description = "Nonebot Cli plugin for LittlePaimon"
 authors = ["CMHopeSunshine <277073121@qq.com>"]
 keywords = ["nonebot2", "nb-cli"]
