@@ -133,14 +133,13 @@ async def resources(ctx: click.Context,
                     f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/data/data.zip',
                     data_zip_path, '原神数据信息')
                 zipfile.ZipFile(data_zip_path).extractall(data_path)
-                click.secho('原神数据信息下载完成', fg='green')
             except Exception as e:
                 click.secho(f'下载原神数据信息时出错: {e}', fg='red')
             if data_zip_path.is_file():
                 data_zip_path.unlink()
 
         if 'icon' in res_type:
-            resources_path = cwd_path / 'resources'
+            resources_path = cwd_path / 'resources' / 'LittlePaimon'
             resources_path.mkdir(exist_ok=True, parents=True)
             icon_zip_path = cwd_path / 'icon.zip'
             try:
@@ -148,7 +147,6 @@ async def resources(ctx: click.Context,
                     f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_resources.zip',
                     icon_zip_path, '原神图标资源')
                 zipfile.ZipFile(icon_zip_path).extractall(resources_path)
-                click.secho('原神图标资源下载完成', fg='green')
             except Exception as e:
                 click.secho(f'下载原神图标资源时出错: {e}', fg='red')
             if icon_zip_path.is_file():
