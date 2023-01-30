@@ -78,14 +78,13 @@ async def resources(ctx: click.Context,
         download_url = await ListPrompt(
             '要使用的资源下载源?',
             [Choice('github官方源(国外推荐)', ''),
-             Choice('ghproxy镜像源(国内推荐)',
-                    'https://ghproxy.com/'),
-             Choice('cherishmoon镜像源(国内备选)',
-                    'https://github.cherishmoon.fun/')],
+             Choice('cherishmoon镜像源(国内推荐)',
+                    'https://github.cherishmoon.fun/'),
+             Choice('ghproxy镜像源(国内备选)',
+                    'https://ghproxy.com/')],
             default_select=1
         ).prompt_async(style=CLI_DEFAULT_STYLE)
         download_url = download_url.data
-
         if 'base' in res_type:
             resources_path = cwd_path / 'resources'
             resources_path.mkdir(exist_ok=True, parents=True)
@@ -110,6 +109,8 @@ async def resources(ctx: click.Context,
                         download_with_bar(
                             url=f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/LittlePaimonRes/main/{resource["path"]}',
                             save_path=file_path, show_name='基础资源' + resource['path'])
+                    except CancelledError as e:
+                        raise e
                     except Exception as e:
                         click.secho(f'下载基础资源{resource["path"]}出错: {e}', fg='red')
             else:
@@ -119,6 +120,8 @@ async def resources(ctx: click.Context,
                         base_zip_path, '小派蒙基础资源')
                     zipfile.ZipFile(base_zip_path).extractall(resources_path)
                     click.secho('小派蒙基础资源下载完成', fg='green')
+                except CancelledError as e:
+                    raise e
                 except Exception as e:
                     click.secho(f'下载小派蒙基础资源时出错: {e}', fg='red')
                 if base_zip_path.is_file():
@@ -133,11 +136,12 @@ async def resources(ctx: click.Context,
                     f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/data/data.zip',
                     data_zip_path, '原神数据信息')
                 zipfile.ZipFile(data_zip_path).extractall(data_path)
+            except CancelledError as e:
+                raise e
             except Exception as e:
                 click.secho(f'下载原神数据信息时出错: {e}', fg='red')
             if data_zip_path.is_file():
                 data_zip_path.unlink()
-
         if 'icon' in res_type:
             resources_path = cwd_path / 'resources' / 'LittlePaimon'
             resources_path.mkdir(exist_ok=True, parents=True)
@@ -147,6 +151,8 @@ async def resources(ctx: click.Context,
                     f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_resources.zip',
                     icon_zip_path, '原神图标资源')
                 zipfile.ZipFile(icon_zip_path).extractall(resources_path)
+            except CancelledError as e:
+                raise e
             except Exception as e:
                 click.secho(f'下载原神图标资源时出错: {e}', fg='red')
             if icon_zip_path.is_file():

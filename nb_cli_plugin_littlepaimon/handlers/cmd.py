@@ -13,14 +13,12 @@ async def clone_paimon(git_url: str,
     :param git_url: git仓库地址
     :param dir_name: 要存放的文件夹名
     """
-    process = await asyncio.create_subprocess_exec('git',
-                                                   'clone',
-                                                   '--depth=1',
-                                                   '--single-branch',
-                                                   git_url,
-                                                   dir_name)
-    stdout, _ = await process.communicate()
-    return process
+    return await asyncio.create_subprocess_exec('git',
+                                                'clone',
+                                                '--depth=1',
+                                                '--single-branch',
+                                                git_url,
+                                                dir_name)
 
 
 async def install_dependencies(file_path: Path,
@@ -39,7 +37,7 @@ async def install_dependencies(file_path: Path,
         python_path = await get_default_python()
     if isinstance(python_path, Path):
         python_path = python_path.absolute()
-    proc = await asyncio.create_subprocess_exec(python_path,
+    return await asyncio.create_subprocess_exec(python_path,
                                                 '-m',
                                                 'pip',
                                                 'install',
@@ -47,8 +45,6 @@ async def install_dependencies(file_path: Path,
                                                 file_path.name,
                                                 *pip_args,
                                                 cwd=file_path.parent.absolute())
-    stdout, _ = await proc.communicate()
-    return proc
 
 
 async def check_git() -> bool:

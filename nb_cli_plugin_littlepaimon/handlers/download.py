@@ -1,8 +1,12 @@
+import signal
 from pathlib import Path
 from typing import Optional
 
 import httpx
 import rich.progress
+from threading import Event
+
+from noneprompt import CancelledError
 
 
 def download_json(url: str):
@@ -23,6 +27,13 @@ def download_with_bar(url: str,
     :param save_path: 保存路径
     :param show_name: 下载时展示的昵称
     """
+    done_event = Event()
+
+    def handle_sigint(signum, frame):
+        done_event.set()
+
+    signal.signal(signal.SIGINT, handle_sigint)
+
     save_path.parent.mkdir(parents=True, exist_ok=True)
     with save_path.open('wb') as f:
         with httpx.stream(method='GET', url=url, follow_redirects=True, verify=False) as datas:
@@ -42,3 +53,5 @@ def download_with_bar(url: str,
                 for data in datas.iter_bytes():
                     f.write(data)
                     progress.update(download_task, completed=datas.num_bytes_downloaded)
+                    if done_event.is_set():
+                        raise CancelledError

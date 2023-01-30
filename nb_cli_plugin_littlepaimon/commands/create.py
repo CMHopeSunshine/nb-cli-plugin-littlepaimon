@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import os
 import shutil
 import stat
@@ -34,14 +35,56 @@ from ..meta import LOGO
               'index_url',
               default=None,
               help='pip下载所使用的镜像源')
+@click.option('-q',
+              '--only-gocq',
+              'only_gocq',
+              default=False,
+              is_flag=True,
+              help='是否只下载go-cqhttp本体')
 @click.pass_context
 @run_async
 async def create(ctx: click.Context,
                  python_interpreter: Optional[str],
-                 index_url: Optional[str]):
+                 index_url: Optional[str],
+                 only_gocq: bool = False):
     """在当前目录下安装小派蒙以及go-cqhttp."""
     click.clear()
     click.secho(LOGO, fg='green', bold=True)
+    if only_gocq:
+        with contextlib.suppress(CancelledError):
+            gocq_download_domain = await ListPrompt(
+                '要使用的go-cqhttp下载源?',
+                [Choice('Github官方源(国外推荐)', 'github.com'),
+                 Choice('FastGit镜像源(国内推荐)', 'download.fgit.ml')],
+                default_select=1
+            ).prompt_async(style=CLI_DEFAULT_STYLE)
+            gocq_path = None
+            try:
+                click.secho('下载go-cqhttp中...', fg='yellow')
+                gocq_path = download_gocq(gocq_download_domain.data)
+            except CancelledError as e:
+                raise e
+            except Exception as e:
+                click.secho(f'下载go-cqhttp失败: {e}', fg='red')
+            if gocq_path and gocq_path.exists():
+                bot_qq = await InputPrompt(
+                    '机器人的QQ号:',
+                    validator=lambda x: x.isdigit(),
+                ).prompt_async(style=CLI_DEFAULT_STYLE)
+                password = await InputPrompt(
+                    '机器人的密码(留空则为扫码登录):',
+                    is_password=True
+                ).prompt_async(style=CLI_DEFAULT_STYLE)
+                config_data = (
+                    (Path(__file__).parent.parent / 'config_template.yml').read_text(encoding='utf-8')
+                    .replace('{{ qq }}', bot_qq)
+                    .replace('{{ password }}', password)
+                )
+                (Path('.') / 'go-cqhttp' / 'config.yml').write_text(config_data, encoding='utf-8')
+                click.secho('go-cqhttp下载并配置完成')
+            else:
+                click.secho('go-cqhttp下载失败, 请稍后手动安装', fg='red')
+        ctx.exit()
 
     click.secho('检查前置环境...', fg='yellow')
     if not await check_git():
@@ -95,16 +138,19 @@ async def create(ctx: click.Context,
             git_url = await ListPrompt(
                 '要使用的克隆源?',
                 [Choice('github官方源(国外推荐)', 'https://github.com/CMHopeSunshine/LittlePaimon'),
-                 Choice('ghproxy镜像源(国内推荐)',
-                        'https://ghproxy.com/https://github.com/CMHopeSunshine/LittlePaimon'),
-                 Choice('cherishmoon镜像源(国内备选1)',
+                 Choice('cherishmoon镜像源(国内推荐)',
                         'https://github.cherishmoon.fun/https://github.com/CMHopeSunshine/LittlePaimon'),
+                 Choice('ghproxy镜像源(国内备选1)',
+                        'https://ghproxy.com/https://github.com/CMHopeSunshine/LittlePaimon'),
                  Choice('gitee镜像源(国内备选2)', 'https://gitee.com/cherishmoon/LittlePaimon')],
                 default_select=1
             ).prompt_async(style=CLI_DEFAULT_STYLE)
             click.secho(f'在 {project_name} 文件夹克隆源码...', fg='yellow')
             clone_result = await clone_paimon(git_url.data, project_name)
             await clone_result.wait()
+
+            if not (Path('.') / project_name / '.env.prod').is_file():
+                ctx.exit()
 
             env_file = (Path('.') / project_name / '.env.prod').read_text(encoding='utf-8')
             superusers = await InputPrompt(
@@ -142,9 +188,13 @@ async def create(ctx: click.Context,
                 )
 
             click.secho('开始安装相关依赖...', fg='yellow')
-            await install_dependencies(file_path=Path('.') / project_name / 'requirements.txt',
-                                       python_path=python_path,
-                                       pip_args=['-i', index_url] if index_url else None)
+            proc = await install_dependencies(file_path=Path('.') / project_name / 'requirements.txt',
+                                              python_path=python_path,
+                                              pip_args=['-i', index_url] if index_url else None)
+            await proc.wait()
+
+        if not (Path('.') / project_name).is_dir():
+            ctx.exit()
 
         # go-cqhttp
         gocq_type = 0
@@ -176,6 +226,8 @@ async def create(ctx: click.Context,
                 try:
                     click.secho('下载go-cqhttp中...', fg='yellow')
                     gocq_path = download_gocq(gocq_download_domain.data)
+                except CancelledError as e:
+                    raise e
                 except Exception as e:
                     click.secho(f'下载go-cqhttp失败: {e}', fg='red')
                 if gocq_path and gocq_path.exists():
