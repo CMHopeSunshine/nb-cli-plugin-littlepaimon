@@ -30,13 +30,21 @@ from ..handlers.cmd import install_dependencies
               help='pip下载所使用的镜像源')
 @click.pass_context
 @run_async
-async def install(
-        ctx: click.Context, name: Optional[List[str]], file: Path, index_url: Optional[str]):
+async def install(ctx: click.Context, name: Optional[List[str]], file: Path, index_url: Optional[str]):
     file_path = Path(file).absolute()
-    python_path = detect_virtualenv()
+    if not ((file_path.parent / 'LittlePaimon').is_dir() and (file_path.parent / 'bot.py').is_file()):
+        click.secho('未检测到当前目录下有小派蒙项目，请确保目录无误', fg='red')
+        ctx.exit()
+    if python_path := detect_virtualenv(file_path.parent):
+        click.secho(
+            f'使用虚拟环境: {python_path}',
+            fg="green"
+        )
     proc = (
         await call_pip_install(
-            name, pip_args=['-i', index_url], python_path=python_path
+            name,
+            python_path=python_path,
+            pip_args=['-i', index_url] if index_url else None
         )
         if name
         else await install_dependencies(file_path=file_path,

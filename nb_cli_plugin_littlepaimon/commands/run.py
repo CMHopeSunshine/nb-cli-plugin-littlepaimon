@@ -22,7 +22,11 @@ async def run(ctx: click.Context, cwd: str):
     if not ((Path(cwd) / 'LittlePaimon').is_dir() and (Path(cwd) / 'bot.py').is_file()):
         click.secho('未检测到当前目录下有小派蒙项目，请确保目录无误', fg='red')
         ctx.exit()
-    python_path = detect_virtualenv(Path(cwd))
+    if python_path := detect_virtualenv(Path(cwd)):
+        click.secho(
+            f'使用虚拟环境: {python_path}',
+            fg="green"
+        )
     should_exit = asyncio.Event()
 
     def shutdown(signum, frame):
