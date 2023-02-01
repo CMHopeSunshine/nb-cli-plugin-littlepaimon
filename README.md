@@ -98,9 +98,13 @@ pip install nb-cli-plugin-littlepaimon
   - `nb paimon create` 
     - 交互式指引安装[LittlePaimon](https://github.com/CMHopeSunshine/LittlePaimon)
     - 自动克隆源码、创建虚拟环境、安装依赖，下载并配置go-cqhttp
-  - `nb paimon run` 启动小派蒙
-    - 实际上和`nb run`一样，不过去掉了不常用的参数 
+    - 添加`-g`参数，则是只下载go-cqhttp
+  - `nb paimon run` 运行python命令或启动小派蒙
+    - 当接有命令时，使用该目录的下python解释器运行命令，例如`nb paimon run playwright install`
+    - 当没有命令时，使用该目录的下python解释器启动小派蒙，实际上等价于`nb run`，不过去掉了不常用的参数 
   - `nb paimon install` 安装依赖库到小派蒙环境中
+    - 当接有参数时，使用该目录的下pip安装依赖，例如`nb paimon install httpx`
+    - 当没有参数时，则是使用该目录的下pip安装`requirements.txt`中的依赖
   - `nb paimon res` 下载或更新小派蒙的资源
   - `nb paimon update` 更新小派蒙，和`git pull`一样
   - `nb paimon logo` 展示小派蒙的logo
