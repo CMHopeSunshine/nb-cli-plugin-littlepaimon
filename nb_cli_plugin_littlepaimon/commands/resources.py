@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 import click
+from rich.console import Console
 from nb_cli.cli import CLI_DEFAULT_STYLE, ClickAliasedCommand, run_async
 from noneprompt import (
     Choice,
@@ -14,6 +15,8 @@ from noneprompt import (
 )
 
 from ..handlers import download_json, download_with_bar
+
+console = Console()
 
 
 @click.command(
@@ -140,8 +143,12 @@ async def resources(
                         base_zip_path,
                         '小派蒙基础资源',
                     )
-                    zipfile.ZipFile(base_zip_path).extractall(resources_path)
-                    click.secho('小派蒙基础资源下载完成', fg='green')
+                    with console.status(
+                        "[bold yellow]解压小派蒙基础资源中..."
+                    ) as status:
+                        zipfile.ZipFile(base_zip_path).extractall(
+                            resources_path
+                        )
                 except CancelledError as e:
                     raise e
                 except Exception as e:
@@ -159,7 +166,8 @@ async def resources(
                     data_zip_path,
                     '原神数据信息',
                 )
-                zipfile.ZipFile(data_zip_path).extractall(data_path)
+                with console.status("[bold yellow]解压原神数据资源中...") as status:
+                    zipfile.ZipFile(data_zip_path).extractall(data_path)
             except CancelledError as e:
                 raise e
             except Exception as e:
@@ -176,7 +184,8 @@ async def resources(
                     icon_zip_path,
                     '原神图标资源',
                 )
-                zipfile.ZipFile(icon_zip_path).extractall(resources_path)
+                with console.status("[bold yellow]解压原神图标资源中...") as status:
+                    zipfile.ZipFile(icon_zip_path).extractall(resources_path)
             except CancelledError as e:
                 raise e
             except Exception as e:
@@ -184,7 +193,7 @@ async def resources(
             if icon_zip_path.is_file():
                 icon_zip_path.unlink()
 
-        click.secho('全部资源更新完成', fg='green')
+        click.secho('资源更新完成', fg='green', bold=True)
 
     except CancelledError:
         ctx.exit()

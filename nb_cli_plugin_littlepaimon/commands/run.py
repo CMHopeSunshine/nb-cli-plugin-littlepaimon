@@ -16,10 +16,13 @@ from ..handlers import run_python_command
 
 
 @click.command(
-    cls=ClickAliasedCommand, aliases=['start'], help='运行命令或启动小派蒙Bot.'
+    cls=ClickAliasedCommand,
+    aliases=['start'],
+    context_settings={"ignore_unknown_options": True},
+    help='运行命令或启动小派蒙Bot.',
 )
-@click.argument('command', nargs=-1, required=False, default=None)
 @click.option("-d", "--cwd", default=".", help='指定工作目录.')
+@click.argument('command', nargs=-1, required=False, default=None)
 @click.pass_context
 @run_async
 async def run(ctx: click.Context, command: Optional[List[str]], cwd: str):
@@ -27,7 +30,7 @@ async def run(ctx: click.Context, command: Optional[List[str]], cwd: str):
         (Path(cwd) / 'LittlePaimon').is_dir()
         and (Path(cwd) / 'bot.py').is_file()
     ):
-        click.secho('未检测到当前目录下有小派蒙项目，请确保目录无误', fg='red')
+        click.secho('未检测到该目录下有小派蒙项目，请确保目录无误', fg='red')
         ctx.exit()
 
     if python_path := detect_virtualenv(Path(cwd)):
