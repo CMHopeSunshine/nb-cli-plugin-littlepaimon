@@ -55,6 +55,10 @@ async def resources(
             '原神图标资源: https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_resources.zip',
             fg='yellow',
         )
+        click.secho(
+            '原神图标资源: https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_splash.zip',
+            fg='yellow',
+        )
         click.secho('如有需要请自行下载!', fg='yellow')
         ctx.exit()
     cwd_path = Path('.')
@@ -74,8 +78,9 @@ async def resources(
                     Choice('小派蒙基础必需资源', 'base'),
                     # Choice('原神数据信息', 'data'),
                     Choice('原神图标资源', 'icon'),
+                    Choice('原神立绘资源', 'splash'),
                 ],
-                default_select=[0, 1],
+                default_select=[0, 1, 2],
             ).prompt_async(style=CLI_DEFAULT_STYLE)
             confirm = (
                 True
@@ -192,6 +197,24 @@ async def resources(
                 click.secho(f'下载原神图标资源时出错: {e}', fg='red')
             if icon_zip_path.is_file():
                 icon_zip_path.unlink()
+        if 'splash' in res_type:
+            resources_path = cwd_path / 'resources' / 'LittlePaimon' / 'splash'
+            resources_path.mkdir(exist_ok=True, parents=True)
+            splash_zip_path = cwd_path / 'splash.zip'
+            try:
+                download_with_bar(
+                    f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_splash.zip',
+                    splash_zip_path,
+                    '原神图标资源',
+                )
+                with console.status("[bold yellow]解压原神立绘资源中...") as status:
+                    zipfile.ZipFile(splash_zip_path).extractall(resources_path)
+            except CancelledError as e:
+                raise e
+            except Exception as e:
+                click.secho(f'下载原神立绘资源时出错: {e}', fg='red')
+            if splash_zip_path.is_file():
+                splash_zip_path.unlink()
 
         click.secho('资源更新完成', fg='green', bold=True)
 
