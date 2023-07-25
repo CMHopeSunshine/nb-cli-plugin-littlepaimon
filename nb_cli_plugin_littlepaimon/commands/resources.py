@@ -148,9 +148,7 @@ async def resources(
                         base_zip_path,
                         '小派蒙基础资源',
                     )
-                    with console.status(
-                        "[bold yellow]解压小派蒙基础资源中..."
-                    ) as status:
+                    with console.status("[bold yellow]解压小派蒙基础资源中..."):
                         zipfile.ZipFile(base_zip_path).extractall(
                             resources_path
                         )
@@ -167,11 +165,11 @@ async def resources(
             data_zip_path = cwd_path / 'data.zip'
             try:
                 download_with_bar(
-                    f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/data/data.zip',
+                    f'{download_url}https://github.com/CMHopeSunshine/GenshinWikiMap/raw/master/data/data.zip',
                     data_zip_path,
                     '原神数据信息',
                 )
-                with console.status("[bold yellow]解压原神数据资源中...") as status:
+                with console.status("[bold yellow]解压原神数据资源中..."):
                     zipfile.ZipFile(data_zip_path).extractall(data_path)
             except CancelledError as e:
                 raise e
@@ -185,11 +183,11 @@ async def resources(
             icon_zip_path = cwd_path / 'icon.zip'
             try:
                 download_with_bar(
-                    f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_resources.zip',
+                    f'{download_url}https://github.com/CMHopeSunshine/GenshinWikiMap/raw/master/resources/genshin_resources.zip',
                     icon_zip_path,
                     '原神图标资源',
                 )
-                with console.status("[bold yellow]解压原神图标资源中...") as status:
+                with console.status("[bold yellow]解压原神图标资源中..."):
                     zipfile.ZipFile(icon_zip_path).extractall(resources_path)
             except CancelledError as e:
                 raise e
@@ -203,11 +201,11 @@ async def resources(
             splash_zip_path = cwd_path / 'splash.zip'
             try:
                 download_with_bar(
-                    f'{download_url}https://raw.githubusercontent.com/CMHopeSunshine/GenshinWikiMap/master/resources/genshin_splash.zip',
+                    f'{download_url}https://github.com/CMHopeSunshine/GenshinWikiMap/raw/master/resources/genshin_splash.zip',
                     splash_zip_path,
-                    '原神图标资源',
+                    '原神立绘资源',
                 )
-                with console.status("[bold yellow]解压原神立绘资源中...") as status:
+                with console.status("[bold yellow]解压原神立绘资源中..."):
                     zipfile.ZipFile(splash_zip_path).extractall(resources_path)
             except CancelledError as e:
                 raise e
