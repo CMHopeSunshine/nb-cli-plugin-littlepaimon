@@ -5,7 +5,7 @@ from typing import List, Optional
 from nb_cli.handlers import get_default_python
 
 
-async def clone_paimon(git_url: str, dir_name: Optional[str] = 'LittlePaimon'):
+async def clone_paimon(git_url: str, dir_name: str = "LittlePaimon"):
     """
     克隆派蒙项目
 
@@ -13,7 +13,12 @@ async def clone_paimon(git_url: str, dir_name: Optional[str] = 'LittlePaimon'):
     :param dir_name: 要存放的文件夹名
     """
     return await asyncio.create_subprocess_exec(
-        'git', 'clone', '--depth=1', '--single-branch', git_url, dir_name
+        "git",
+        "clone",
+        "--depth=1",
+        "--single-branch",
+        git_url,
+        dir_name,
     )
 
 
@@ -33,14 +38,12 @@ async def install_dependencies(
         pip_args = []
     if python_path is None:
         python_path = await get_default_python()
-    if isinstance(python_path, Path):
-        python_path = python_path.absolute()
     return await asyncio.create_subprocess_exec(
         python_path,
-        '-m',
-        'pip',
-        'install',
-        '-r',
+        "-m",
+        "pip",
+        "install",
+        "-r",
         file_path.name,
         *pip_args,
         cwd=file_path.parent.absolute(),
@@ -55,7 +58,10 @@ async def run_python_command(
     if python_path is None:
         python_path = await get_default_python()
     return await asyncio.create_subprocess_exec(
-        python_path, '-m', *command, cwd=cwd
+        python_path,
+        "-m",
+        *command,
+        cwd=cwd,
     )
 
 
@@ -66,7 +72,7 @@ async def check_git() -> bool:
     :return: 布尔值
     """
     process = await asyncio.create_subprocess_shell(
-        'git --version',
+        "git --version",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
@@ -79,6 +85,6 @@ async def git_pull(cwd: Optional[Path] = None):
     通过git更新派蒙项目
 
     """
-    process = await asyncio.create_subprocess_shell('git pull', cwd=cwd)
+    process = await asyncio.create_subprocess_shell("git pull", cwd=cwd)
     stdout, _ = await process.communicate()
     return process

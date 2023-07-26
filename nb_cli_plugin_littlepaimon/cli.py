@@ -1,17 +1,19 @@
-from typing import List, cast
-
-import click
-from nb_cli import _
-from nb_cli.cli import CLI_DEFAULT_STYLE, ClickAliasedGroup, run_sync, run_async
-from noneprompt import Choice, ListPrompt, CancelledError
+from typing import cast, List
 
 from . import __version__
 from .meta import LOGO
 
+import click
+from nb_cli import _
+from nb_cli.cli import CLI_DEFAULT_STYLE, ClickAliasedGroup, run_async, run_sync
+from noneprompt import CancelledError, Choice, ListPrompt
 
-@click.group(cls=ClickAliasedGroup,
-             invoke_without_command=True,
-             help='管理 LittlePaimon.')
+
+@click.group(
+    cls=ClickAliasedGroup,
+    invoke_without_command=True,
+    help="管理 LittlePaimon.",
+)
 @click.version_option(
     __version__,
     "-V",
@@ -37,14 +39,15 @@ async def paimon(ctx: click.Context):
                     sub_cmd.help
                     or _("Run subcommand {sub_cmd.name!r}").format(sub_cmd=sub_cmd),
                     sub_cmd,
-                )
+                ),
             )
-    click.secho(LOGO, fg='green', bold=True)
-    click.secho('欢迎来到小派蒙的Nonebot CLI 插件!', fg='green', bold=True)
+    click.secho(LOGO, fg="green", bold=True)
+    click.secho("欢迎来到小派蒙的Nonebot CLI 插件!", fg="green", bold=True)
 
     try:
         result = await ListPrompt(
-            '你想要进行什么操作?', choices=choices
+            "你想要进行什么操作?",
+            choices=choices,
         ).prompt_async(style=CLI_DEFAULT_STYLE)
     except CancelledError:
         ctx.exit()
@@ -63,9 +66,9 @@ paimon.add_command(resources)
 
 
 @paimon.command(
-    aliases=['show'],
-    help='展示小派蒙的LOGO.'
+    aliases=["show"],
+    help="展示小派蒙的LOGO.",
 )
 def logo():
-    click.secho(LOGO, fg='green', bold=True)
-    click.secho('欢迎来到小派蒙的Nonebot CLI插件!', fg='green', bold=True)
+    click.secho(LOGO, fg="green", bold=True)
+    click.secho("欢迎来到小派蒙的Nonebot CLI插件!", fg="green", bold=True)
