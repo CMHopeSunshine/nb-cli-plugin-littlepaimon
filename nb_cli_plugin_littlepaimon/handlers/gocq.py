@@ -1,23 +1,23 @@
+from pathlib import Path
 import platform
 import shutil
-from pathlib import Path
+
+from .download import download_with_bar
 
 from cpuinfo import get_cpu_info
 from nb_cli.consts import WINDOWS
 
-from .download import download_with_bar
-
 _SYSTEM_MAP = {
     "Windows": "windows",
-    "Linux":   "linux",
-    "Darwin":  "darwin",
+    "Linux": "linux",
+    "Darwin": "darwin",
 }
 
 _ARCHITECTURE_MAP = {
     "X86_32": "386",
     "X86_64": "amd64",
-    "ARM_7":  "armv7",
-    "ARM_8":  "arm64",
+    "ARM_7": "armv7",
+    "ARM_8": "arm64",
 }
 
 
@@ -43,16 +43,20 @@ EXECUTABLE_EXT = ".exe" if WINDOWS else ""
 GOCQ_DIR = Path() / "go-cqhttp"
 
 
-def download_gocq(download_domain: str = 'github.com'):
+def download_gocq(download_domain: str = "github.com"):
     """
     下载gocq
 
     :param download_domain: 下载源
     """
     GOCQ_DIR.mkdir(parents=True, exist_ok=True)
-    download_path = Path() / f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
-    url = f'https://{download_domain}/Mrs4s/go-cqhttp/releases/latest/download/go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}'
-    download_with_bar(url=url, save_path=download_path, show_name=f'go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}')
+    download_path = Path() / f"go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}"
+    url = f"https://{download_domain}/Mrs4s/go-cqhttp/releases/latest/download/go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}"
+    download_with_bar(
+        url=url,
+        save_path=download_path,
+        show_name=f"go-cqhttp_{GOOS}_{GOARCH}{ARCHIVE_EXT}",
+    )
     shutil.unpack_archive(download_path, extract_dir=GOCQ_DIR)
     download_path.unlink()
-    return GOCQ_DIR / f'go-cqhttp{EXECUTABLE_EXT}'
+    return GOCQ_DIR / f"go-cqhttp{EXECUTABLE_EXT}"
