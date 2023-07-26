@@ -62,7 +62,7 @@ async def create(
                 '要使用的go-cqhttp下载源?',
                 [
                     Choice('Github官方源(国外推荐)', 'github.com'),
-                    Choice('FastGit镜像源(国内推荐)', 'download.fgit.ml'),
+                    Choice('FastGit镜像源(国内推荐)', 'download.fgit.cf'),
                 ],
                 default_select=1,
             ).prompt_async(style=CLI_DEFAULT_STYLE)
